@@ -50,9 +50,9 @@ jobs:
           SIMULATE_STORES: "false" # In production GitHub action, we try to run real queries
         run: |
           if [ "${{ github.event.schedule }}" = "30 2 * * *" ] || [ "${{ inputs.health }}" = "true" ]; then
-            python src/main.py --health
+            python -m src.main --health
           else
-            python src/main.py
+            python -m src.main
           fi
 
       - name: Commit and Push Changes
