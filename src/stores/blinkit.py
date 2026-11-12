@@ -97,6 +97,7 @@ class BlinkitStore(BaseStore):
                     logger.warning(f"{self.name} returned 200 OK but no products parsed from JSON structure.")
             else:
                 logger.warning(f"{self.name} API returned status code {response.status_code}.")
+                logger.warning("Blinkit response preview: %r", response.text[:500])
                 if os.getenv("SIMULATE_STORES", "true").lower() != "true":
                     raise StoreError(f"Blinkit API returned status code {response.status_code}")
                 
