@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 import requests
 from typing import List, Dict, Any
@@ -97,7 +98,10 @@ class BlinkitStore(BaseStore):
                     logger.warning(f"{self.name} returned 200 OK but no products parsed from JSON structure.")
             else:
                 logger.warning(f"{self.name} API returned status code {response.status_code}.")
-                logger.warning("Blinkit response preview: %r", response.text[:500])
+                title = re.search(r"<title[^>]*>(.*?)</title>", response.text, re.I | re.S)
+                logger.warning("Blinkit final URL: %s", response.url)
+                logger.warning("Blinkit page title: %s", title.group(1).strip() if title else "No title")
+                logger.warning("Blinkit content type: %s", response.headers.get("Content-Type"))
                 if os.getenv("SIMULATE_STORES", "true").lower() != "true":
                     raise StoreError(f"Blinkit API returned status code {response.status_code}")
                 
